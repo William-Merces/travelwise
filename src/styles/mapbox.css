@@ -1,0 +1,57 @@
+.mapboxgl-map {
+  border-radius: 0.5rem;
+}
+
+.mapboxgl-ctrl-group {
+  background-color: white !important;
+  border: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.mapboxgl-ctrl-group button {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.mapboxgl-popup {
+  max-width: 300px !important;
+}
+
+.mapboxgl-popup-content {
+  padding: 15px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.mapboxgl-popup-close-button {
+  font-size: 16px !important;
+  padding: 5px 8px !important;
+  color: #666 !important;
+}
+
+.marker {
+  cursor: pointer;
+}
+
+.marker:hover {
+  z-index: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+  .mapboxgl-ctrl-group {
+    background-color: #1f2937 !important;
+  }
+
+  .mapboxgl-ctrl-group button {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  .mapboxgl-popup-content {
+    background-color: #1f2937 !important;
+    color: #fff !important;
+  }
+
+  .mapboxgl-popup-close-button {
+    color: #fff !important;
+  }
+}
