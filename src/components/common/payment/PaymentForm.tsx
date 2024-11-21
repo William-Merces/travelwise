@@ -7,7 +7,7 @@ import {
     useStripe,
     useElements,
 } from '@stripe/react-stripe-js';
-import { LoaderCircle } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { formatCurrency } from '@/utils/helpers';
 
 interface PaymentFormProps {
@@ -129,7 +129,7 @@ const PaymentForm = ({ amount, onSuccess, onError }: PaymentFormProps) => {
                 >
                     {isLoading ? (
                         <div className="flex items-center justify-center">
-                            <LoaderCircle className="animate-spin -ml-1 mr-3 h-5 w-5" />
+                            <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5" />
                             Processando...
                         </div>
                     ) : (
