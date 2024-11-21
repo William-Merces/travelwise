@@ -118,7 +118,7 @@ export async function GET(request: Request) {
             checkIn: new Date(searchParams.get('checkIn') || Date.now()),
             passengers: parseInt(searchParams.get('passengers') || '1'),
             checkOut: searchParams.get('checkOut') 
-                ? new Date(searchParams.get('checkOut'))
+                ? new Date(searchParams.get('checkOut') || '')
                 : undefined
         };
 
