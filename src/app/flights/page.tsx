@@ -1,3 +1,4 @@
+// src/app/flights/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -21,28 +22,33 @@ export default function FlightsPage() {
     const handleSearch = async (searchData: SearchFormData) => {
         try {
             setIsLoading(true);
-            console.log('Search Data:', searchData); // Debug log
 
             const queryParams = new URLSearchParams({
-                origin: searchData.origin || '',
-                destination: searchData.destination || '',
-                date: searchData.checkIn.toISOString().split('T')[0]
+                origin: searchData.origin,
+                destination: searchData.destination,
+                checkIn: searchData.checkIn.toISOString().split('T')[0],
+                passengers: searchData.passengers.toString()
             });
 
-            console.log('API URL:', `/api/flights?${queryParams}`); // Debug log
+            if (searchData.checkOut) {
+                queryParams.append('checkOut', searchData.checkOut.toISOString().split('T')[0]);
+            }
 
             const response = await fetch(`/api/flights?${queryParams}`);
-            console.log('Response status:', response.status); // Debug log
-
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             const data = await response.json();
-            console.log('Response data:', data); // Debug log
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
             setFlights(data);
         } catch (error) {
             console.error('Error searching flights:', error);
+            alert('Erro ao buscar voos. Por favor, tente novamente.');
         } finally {
             setIsLoading(false);
         }
@@ -50,7 +56,7 @@ export default function FlightsPage() {
 
     const handleFilterChange = (newFilters: FlightFilters) => {
         setFilters(newFilters);
-        // Apply filters to current flight list
+        // Implementar lógica de filtro aqui
     };
 
     return (
@@ -59,7 +65,7 @@ export default function FlightsPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 <aside className="lg:col-span-1">
-                    <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
                         <h2 className="text-xl font-semibold mb-4">Filtros</h2>
                         <FlightFilterForm
                             filters={filters}
@@ -69,7 +75,7 @@ export default function FlightsPage() {
                 </aside>
 
                 <div className="lg:col-span-3">
-                    <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4 mb-6">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
                         <FlightSearchForm onSearch={handleSearch} />
                     </div>
 
@@ -77,11 +83,20 @@ export default function FlightsPage() {
                         <div className="flex justify-center p-8">
                             <LoadingSpinner />
                         </div>
-                    ) : (
+                    ) : flights.length > 0 ? (
                         <FlightsList
                             flights={flights}
                             showFavoriteButton={!!user}
                         />
+                    ) : (
+                        <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow">
+                            <p className="text-gray-600 dark:text-gray-400">
+                                Nenhum voo encontrado
+                            </p>
+                            <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                                Tente ajustar seus filtros ou alterar as datas de viagem
+                            </p>
+                        </div>
                     )}
                 </div>
             </div>

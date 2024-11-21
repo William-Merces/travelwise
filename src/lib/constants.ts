@@ -1,0 +1,1 @@
+export const REVALIDATION_TIME = 3600; // 1 hora em segundos

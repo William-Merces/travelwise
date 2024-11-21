@@ -12,7 +12,8 @@ import WeatherWidget from '@/components/common/weather/WeatherWidget';
 export default function HotelsPage() {
     const { user } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
-    const [hotels, setHotels] = useState<Hotel[]>([]);
+    const [originalHotels, setOriginalHotels] = useState<Hotel[]>([]);
+    const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
     const [selectedLocation, setSelectedLocation] = useState('');
     const [filters, setFilters] = useState<HotelFilters>({
         priceRange: [0, 2000],
@@ -27,21 +28,37 @@ export default function HotelsPage() {
 
             const params = new URLSearchParams({
                 destination: searchData.destination,
-                checkIn: searchData.checkIn.toISOString(),
-                checkOut: searchData.checkOut.toISOString()
+                checkIn: searchData.checkIn.toISOString().split('T')[0],
+                checkOut: (searchData.checkOut || searchData.checkIn).toISOString().split('T')[0]
             });
 
-            const response = await fetch(`/api/hotels?${params}`, {
-                method: 'GET'
-            });
+            console.log('Fazendo busca com parâmetros:', params.toString());
 
-            if (!response.ok) throw new Error('Failed to fetch hotels');
-            
+            const response = await fetch(`/api/hotels?${params}`);
             const data = await response.json();
-            setHotels(data);
+
+            if (!response.ok) {
+                console.error('Erro na API:', data);
+                setOriginalHotels([]);
+                setFilteredHotels([]);
+                return;
+            }
+
+            if (Array.isArray(data)) {
+                if (data.length === 0) {
+                    console.log('Nenhum hotel encontrado para os critérios de busca');
+                }
+                setOriginalHotels(data);
+                setFilteredHotels(data);
+            } else {
+                console.error('Formato de resposta inesperado:', data);
+                setOriginalHotels([]);
+                setFilteredHotels([]);
+            }
         } catch (error) {
-            console.error('Error searching hotels:', error);
-            setHotels([]);
+            console.error('Erro ao buscar hotéis:', error);
+            setOriginalHotels([]);
+            setFilteredHotels([]);
         } finally {
             setIsLoading(false);
         }
@@ -50,17 +67,18 @@ export default function HotelsPage() {
     const handleFilterChange = (newFilters: HotelFilters) => {
         setFilters(newFilters);
         
-        // Aplicar filtros localmente
-        const filteredHotels = hotels.filter(hotel => {
-            const priceInRange = hotel.price >= newFilters.priceRange[0] && hotel.price <= newFilters.priceRange[1];
+        const filtered = originalHotels.filter(hotel => {
+            const priceInRange = hotel.price >= newFilters.priceRange[0] && 
+                               hotel.price <= newFilters.priceRange[1];
             const meetsRating = hotel.rating >= newFilters.rating;
             const hasAmenities = newFilters.amenities.length === 0 || 
-                newFilters.amenities.every(amenity => hotel.amenities.includes(amenity));
+                               newFilters.amenities.every(amenity => 
+                                   hotel.amenities.includes(amenity));
             
             return priceInRange && meetsRating && hasAmenities;
         });
         
-        setHotels(filteredHotels);
+        setFilteredHotels(filtered);
     };
 
     return (
@@ -97,7 +115,7 @@ export default function HotelsPage() {
                         </div>
                     ) : (
                         <HotelsList
-                            hotels={hotels}
+                            hotels={filteredHotels}
                             showFavoriteButton={!!user}
                         />
                     )}

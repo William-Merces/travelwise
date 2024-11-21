@@ -6,30 +6,53 @@ import { Plane, Building2, Package, ArrowRight } from 'lucide-react';
 import SearchBar from '@/components/common/search/SearchBar';
 import { POPULAR_DESTINATIONS, SECTION_MOTTOS } from '@/utils/constants';
 
+const sections = [
+  {
+    id: 'flights',
+    icon: Plane,
+    title: 'Voos',
+    motto: SECTION_MOTTOS.flights,
+    href: '/flights'
+  },
+  {
+    id: 'hotels',
+    icon: Building2,
+    title: 'Hotéis',
+    motto: SECTION_MOTTOS.hotels,
+    href: '/hotels'
+  },
+  {
+    id: 'packages',
+    icon: Package,
+    title: 'Pacotes',
+    motto: SECTION_MOTTOS.packages,
+    href: '/packages'
+  }
+];
+
 export default function HomePage() {
-  const sections = [
-    {
-      id: 'flights',
-      icon: Plane,
-      title: 'Voos',
-      motto: SECTION_MOTTOS.flights,
-      href: '/flights'
-    },
-    {
-      id: 'hotels',
-      icon: Building2,
-      title: 'Hotéis',
-      motto: SECTION_MOTTOS.hotels,
-      href: '/hotels'
-    },
-    {
-      id: 'packages',
-      icon: Package,
-      title: 'Pacotes',
-      motto: SECTION_MOTTOS.packages,
-      href: '/packages'
-    }
-  ];
+  const renderSection = (section: typeof sections[0]) => {
+    const { id, icon: Icon, title, motto, href } = section;
+    
+    return (
+      <div key={id} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+          <Icon className="w-8 h-8 text-primary" />
+          <Link href={href} className="text-primary hover:underline">
+            Ver todos
+          </Link>
+        </div>
+        <h2 className="text-2xl font-bold mb-2">{title}</h2>
+        <p className="text-gray-600 dark:text-gray-300 mb-4">{motto}</p>
+        <Link
+          href={href}
+          className="btn btn-primary w-full flex items-center justify-center"
+        >
+          Buscar {title} <ArrowRight className="ml-2 w-4 h-4" />
+        </Link>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -58,25 +81,7 @@ export default function HomePage() {
 
       <section className="container mx-auto px-4 mt-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {sections.map(({ id, icon: Icon, title, motto, href }) => (
-            <div key={id} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-              <div className="flex items-center justify-between mb-4">
-                <Icon className="w-8 h-8 text-primary" />
-                <Link key={`${id}-view-all`} href={href} className="text-primary hover:underline">
-                  Ver todos
-                </Link>
-              </div>
-              <h2 className="text-2xl font-bold mb-2">{title}</h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">{motto}</p>
-              <Link
-                key={`${id}-search`}
-                href={href}
-                className="btn btn-primary w-full flex items-center justify-center"
-              >
-                Buscar {title} <ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
-            </div>
-          ))}
+          {sections.map(renderSection)}
         </div>
       </section>
 

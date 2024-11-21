@@ -70,7 +70,7 @@ const SearchBar = ({ type, onSearch, className = '' }: SearchBarProps) => {
             {!isExpanded && (
                 <div
                     onClick={() => setIsExpanded(true)}
-                    className="cursor-pointer bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 flex items-center space-x-4"
+                    className="cursor-pointer bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 flex items-center space-x-4 hover:shadow-lg transition-shadow"
                 >
                     <Search className="text-gray-400" />
                     <span className="text-gray-500 dark:text-gray-400">
@@ -97,10 +97,10 @@ const SearchBar = ({ type, onSearch, className = '' }: SearchBarProps) => {
                                         value={searchParams.origin}
                                         onChange={(e) => setSearchParams({ ...searchParams, origin: e.target.value })}
                                         placeholder="De onde você vai sair?"
-                                        className="form-input pl-10"
+                                        className="form-input pl-10 w-full rounded-md border border-gray-300 dark:border-gray-600"
                                     />
                                     <Map
-                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 cursor-pointer"
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 cursor-pointer hover:text-gray-600"
                                         onClick={() => setShowLocationPicker(true)}
                                     />
                                 </div>
@@ -113,9 +113,9 @@ const SearchBar = ({ type, onSearch, className = '' }: SearchBarProps) => {
                                         value={searchParams.destination}
                                         onChange={(e) => setSearchParams({ ...searchParams, destination: e.target.value })}
                                         placeholder="Para onde você vai?"
-                                        className="form-input pl-10"
+                                        className="form-input pl-10 w-full rounded-md border border-gray-300 dark:border-gray-600"
                                     />
-                                    <Map className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                    <Map className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 hover:text-gray-600" />
                                 </div>
                             </div>
                         </div>
@@ -130,10 +130,10 @@ const SearchBar = ({ type, onSearch, className = '' }: SearchBarProps) => {
                                     value={searchParams.destination}
                                     onChange={(e) => setSearchParams({ ...searchParams, destination: e.target.value })}
                                     placeholder="Para onde você vai?"
-                                    className="form-input pl-10"
+                                    className="form-input pl-10 w-full rounded-md border border-gray-300 dark:border-gray-600"
                                 />
                                 <Map
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 cursor-pointer"
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 cursor-pointer hover:text-gray-600"
                                     onClick={() => setShowLocationPicker(true)}
                                 />
                             </div>
@@ -148,10 +148,11 @@ const SearchBar = ({ type, onSearch, className = '' }: SearchBarProps) => {
                                     type="date"
                                     value={searchParams.checkIn}
                                     onChange={(e) => setSearchParams({ ...searchParams, checkIn: e.target.value })}
-                                    className="form-input pl-10"
+                                    className="form-input pl-10 w-full rounded-md border border-gray-300 dark:border-gray-600 appearance-none"
                                     min={formatDate(new Date())}
+                                    style={{ colorScheme: 'dark' }}
                                 />
-                                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                <Calendar className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                             </div>
                         </div>
                         <div>
@@ -161,10 +162,11 @@ const SearchBar = ({ type, onSearch, className = '' }: SearchBarProps) => {
                                     type="date"
                                     value={searchParams.checkOut}
                                     onChange={(e) => setSearchParams({ ...searchParams, checkOut: e.target.value })}
-                                    className="form-input pl-10"
-                                    min={searchParams.checkIn}
+                                    className="form-input pl-10 w-full rounded-md border border-gray-300 dark:border-gray-600 appearance-none"
+                                    min={searchParams.checkIn || formatDate(new Date())}
+                                    style={{ colorScheme: 'dark' }}
                                 />
-                                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                <Calendar className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                             </div>
                         </div>
                     </div>
@@ -178,9 +180,9 @@ const SearchBar = ({ type, onSearch, className = '' }: SearchBarProps) => {
                                     value={searchParams.passengers}
                                     onChange={(e) => setSearchParams({ ...searchParams, passengers: Number(e.target.value) })}
                                     min="1"
-                                    className="form-input pl-10"
+                                    className="form-input pl-10 w-full rounded-md border border-gray-300 dark:border-gray-600"
                                 />
-                                <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                <Users className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                             </div>
                         </div>
                         {(type === 'hotels' || type === 'packages') && (
@@ -192,23 +194,26 @@ const SearchBar = ({ type, onSearch, className = '' }: SearchBarProps) => {
                                         value={searchParams.rooms}
                                         onChange={(e) => setSearchParams({ ...searchParams, rooms: Number(e.target.value) })}
                                         min="1"
-                                        className="form-input pl-10"
+                                        className="form-input pl-10 w-full rounded-md border border-gray-300 dark:border-gray-600"
                                     />
-                                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                    <Users className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                                 </div>
                             </div>
                         )}
                     </div>
 
-                    <div className="flex justify-end space-x-4">
+                    <div className="flex justify-end space-x-4 pt-4">
                         <button
                             type="button"
                             onClick={() => setIsExpanded(false)}
-                            className="btn btn-outline"
+                            className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors"
                         >
                             Cancelar
                         </button>
-                        <button type="submit" className="btn btn-primary">
+                        <button 
+                            type="submit" 
+                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                        >
                             Buscar
                         </button>
                     </div>
@@ -222,7 +227,7 @@ const SearchBar = ({ type, onSearch, className = '' }: SearchBarProps) => {
                         <h3 className="text-lg font-semibold">Selecionar localização</h3>
                         <button
                             onClick={() => setShowLocationPicker(false)}
-                            className="text-gray-500 hover:text-gray-700"
+                            className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                         >
                             <X className="w-5 h-5" />
                         </button>

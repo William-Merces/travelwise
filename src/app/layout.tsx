@@ -1,4 +1,5 @@
 import { Inter } from 'next/font/google';
+import { headers } from 'next/headers';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Sidebar from '@/components/layout/Sidebar';
@@ -18,9 +19,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  headers(); // Força o componente a ser dinâmico
+  
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <Providers>
           <div className="min-h-screen flex flex-col">
             <Header />

@@ -1,11 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    reactStrictMode: true,
     images: {
         domains: [
             'openweathermap.org',
             'api.mapbox.com',
             'avatars.githubusercontent.com',
-            'lh3.googleusercontent.com'
+            'lh3.googleusercontent.com',
+            'cf.bstatic.com',
+            'images.unsplash.com',
+            'localhost'
         ],
     },
     env: {
@@ -19,6 +23,9 @@ const nextConfig = {
         GITHUB_SECRET: process.env.GITHUB_SECRET,
         GOOGLE_ID: process.env.GOOGLE_ID,
         GOOGLE_SECRET: process.env.GOOGLE_SECRET,
+    },
+    experimental: {
+        serverActions: true
     }
 }
 

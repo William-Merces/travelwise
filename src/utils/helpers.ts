@@ -5,14 +5,33 @@ export const formatCurrency = (value: number): string => {
     }).format(value);
 };
 
-export const formatDate = (date: Date): string => {
-    return new Intl.DateTimeFormat('pt-BR').format(date);
+export const formatDate = (date: Date | string): string => {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    return new Intl.DateTimeFormat('pt-BR', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    }).format(dateObj);
+};
+
+export const formatTime = (dateString: string): string => {
+    return new Intl.DateTimeFormat('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit'
+    }).format(new Date(dateString));
 };
 
 export const formatFlightDuration = (minutes: number): string => {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
     return `${hours}h ${remainingMinutes}min`;
+};
+
+// Nova função para formatar duração no formato da Skyscanner (PT2H30M)
+export const formatSkyscannerDuration = (duration: string): string => {
+    const hours = duration.match(/(\d+)H/)?.[1] || '0';
+    const minutes = duration.match(/(\d+)M/)?.[1] || '0';
+    return `${hours}h ${minutes}min`;
 };
 
 export const calculatePackageSavings = (flightPrice: number, hotelPrice: number, packagePrice: number): number => {
@@ -64,4 +83,33 @@ export const isValidCPF = (cpf: string): boolean => {
     if (remainder !== parseInt(cleanCPF.substring(10, 11))) return false;
 
     return true;
+};
+
+// Novas funções para trabalhar com a API do Skyscanner
+export const calculateDuration = (departure: string, arrival: string): string => {
+    const start = new Date(departure);
+    const end = new Date(arrival);
+    const durationInMinutes = (end.getTime() - start.getTime()) / (1000 * 60);
+    return formatFlightDuration(durationInMinutes);
+};
+
+export const formatSkyscannerDate = (date: Date): string => {
+    return date.toISOString().split('T')[0];
+};
+
+// Função para limpar e formatar strings de localização
+export const formatLocation = (location: string): string => {
+    return location
+        .replace(/International Airport/gi, '')
+        .replace(/Airport/gi, '')
+        .trim();
+};
+
+// Função para determinar o período do dia
+export const getFlightPeriod = (time: string): 'morning' | 'afternoon' | 'evening' | 'night' => {
+    const hour = new Date(time).getHours();
+    if (hour >= 5 && hour < 12) return 'morning';
+    if (hour >= 12 && hour < 17) return 'afternoon';
+    if (hour >= 17 && hour < 22) return 'evening';
+    return 'night';
 };

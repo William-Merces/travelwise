@@ -10,10 +10,16 @@ interface ProvidersProps {
 
 export default function Providers({ children }: ProvidersProps) {
     return (
-        <ThemeProvider attribute="class" defaultTheme="light">
-            <SessionProvider>
+        <SessionProvider>
+            <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+                storageKey="travelwise-theme"
+            >
                 {children}
-            </SessionProvider>
-        </ThemeProvider>
+            </ThemeProvider>
+        </SessionProvider>
     );
 }
